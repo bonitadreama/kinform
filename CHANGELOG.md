@@ -4,7 +4,7 @@
 
 Phone-only session length is now a shared App Settings choice: 5, 15, 30, 60 minutes, or Unlimited. Existing installs keep the five-minute default until changed. A renewable bounded wake lock supports longer locked-screen calls and releases when the session stops. Cancellation removes the timer and renewal callbacks; stale callbacks cannot stop a later session. Provider and legacy-backend limits remain separate. Character data, keys, and memory protocols are unchanged.
 
-Automated timer tests cover all finite deadlines, Unlimited beyond 24 simulated hours, Stop, renewal failures, invalid stored choices, and stale callbacks. A real-phone long-call test is still needed.
+Automated timer tests cover all finite deadlines, Unlimited beyond 24 simulated hours, Stop, renewal failures, invalid stored choices, and stale callbacks. Phone acceptance passed on October 25, 2026: Unlimited persisted after saving and reopening settings, a call continued past six minutes, and Stop ended it normally. This does not establish indefinite call duration or broad device compatibility.
 
 ## 0.8.15 source preview
 

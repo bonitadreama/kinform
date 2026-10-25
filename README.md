@@ -21,6 +21,7 @@ Kinform is an experimental native Android companion app. Greg, a sarcastic rock,
 - Optional recent conversation excerpts, with bounded storage and model context.
 - Editable saved memories and character exports/imports.
 - A fixed Save control on character editing screens.
+- Configurable phone-only session length, including Unlimited (no app-imposed timer).
 
 Explicit voice saves persist the **user's candidate fact**, never the character's confirmation wording. Ambiguous “save that” and incomplete corrections need clarification. The current parser is conservative and English-oriented; it is not arbitrary natural-language understanding. [Architecture and a guided exercise](CONTRIBUTING.md).
 
@@ -32,7 +33,7 @@ Exported character backups are readable plaintext and may include private conver
 
 ## Status and participation
 
-Real-phone tests have confirmed clean explicit saves, complete corrections, cancellation, and persistence after reopening on 0.8.15. This is a community preview, not a security certification or a guarantee across phones, Bluetooth devices, or model responses. [Verification and limitations](VERIFICATION.md), [roadmap](ROADMAP.md), [changes](CHANGELOG.md).
+Real-phone tests have confirmed clean explicit saves, complete corrections, cancellation, and persistence after reopening on 0.8.15. On 0.8.16, the owner confirmed that Unlimited stayed selected after saving and reopening App Settings, a call continued past six minutes, and Stop ended it normally. This is a community preview, not a security certification or a guarantee across phones, Bluetooth devices, or model responses. [Verification and limitations](VERIFICATION.md), [roadmap](ROADMAP.md), [changes](CHANGELOG.md).
 
 The optional [legacy LAN backend](backend/README.md) remains available for experimentation. It does not provide the newer phone-only memory/history feature set.
 
