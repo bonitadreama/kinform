@@ -30,7 +30,7 @@ final class MemoryTrace {
         if(e==Event.INPUT_CLEARED_OUTPUT)clears++;
         if(recent.size()==24)recent.removeFirst();recent.addLast(e);
     }
-    String report(){return "Memory diagnostic · 0.8.15\nConnection: "+(direct?"phone-only":"legacy backend")+
+    String report(){return "Memory diagnostic · 0.8.16\nConnection: "+(direct?"phone-only":"legacy backend")+
         "\nAI suggestions enabled: "+auto+"\nHistory enabled: "+history+
         "\nInput transcript events: "+inputs+"\nOutput transcript events: "+outputs+
         "\nTranscript events missing IDs: "+missingIds+"\nSuggestion marker detected: "+markerSeen+
