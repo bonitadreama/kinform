@@ -3,7 +3,13 @@
 1. Open **App Settings → Connection & API key**. Select Phone-only and **Add / replace my API key**. Enter your own dedicated OpenAI project key privately on your phone.
 2. Leave Remember unchecked for process-lifetime storage, or choose encrypted storage. Closing an activity does not necessarily stop the process. **Remove my API key** clears the app's key; revoking a key at the provider is a separate action.
 3. Create/select a character and choose a preset voice. Custom voices require provider eligibility and access to their originating project.
-4. Connect a Bluetooth device supporting both microphone and speaker call audio. Tap Talk and select it. Stop ends recording; session finalization may take up to 15 seconds. Route/focus loss and the five-minute limit stop sessions. There is no automatic reconnect.
+4. Connect a Bluetooth device supporting both microphone and speaker call audio. Tap Talk and select it. Stop ends recording; session finalization may take up to 15 seconds. Route/focus loss and your selected time limit stop sessions. There is no automatic reconnect.
+
+## Session length
+
+Open **App Settings → Session length**, select **5, 15, 30, or 60 minutes**, or **Unlimited**, then tap **Save**. The setting persists on this phone, applies to all characters on the next phone-only Talk, and can only be changed while Talk is stopped. Existing installs default to five minutes. The timer starts when Talk starts, including connection setup.
+
+Unlimited removes the app timer; it does not override provider limits or keep a broken connection alive. API usage continues until you stop or the connection ends. Stop, Bluetooth loss, and audio-focus loss still end the call. The notification remains available with a Stop action. The optional legacy backend retains its separate limits and the app's five-minute legacy limit. The session setting is not part of a character backup.
 
 ## Memories
 

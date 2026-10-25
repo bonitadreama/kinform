@@ -4,13 +4,13 @@ Give an ordinary object a voice, a personality, and memories you control.
 
 Kinform is an experimental native Android companion app. Greg, a sarcastic rock, helped us test it. Create your own character, connect a Bluetooth device with microphone and speaker call audio, and talk using your own OpenAI API key.
 
-**Public source preview: 0.8.15.** Android 12 or newer. Phone-only mode connects directly to OpenAI: no PC or Kinform server is needed during use. It needs internet, API billing, and access to the configured `gpt-live-1` model. A ChatGPT subscription does not pay for API usage. Model and custom-voice availability depend on your account.
+**Public source preview: 0.8.16.** Android 12 or newer. Phone-only mode connects directly to OpenAI: no PC or Kinform server is needed during use. It needs internet, API billing, and access to the configured `gpt-live-1` model. A ChatGPT subscription does not pay for API usage. Model and custom-voice availability depend on your account.
 
 ## Start here
 
 1. [Build a development APK](BUILDING.md). Development builds install as `org.kinform.app.dev`, separately from the original app. No signed public release APK is bundled.
 2. [Set up phone-only mode](PHONE-ONLY.md), enter your own key privately on the phone, and select a voice your project can use.
-3. Create a character and start Talk with a compatible Bluetooth call-audio device. Stop ends recording. Sessions are limited to five minutes.
+3. Create a character and start Talk with a compatible Bluetooth call-audio device. Stop ends recording. Choose 5, 15, 30, or 60 minutes, or Unlimited in App Settings (five minutes remains the default).
 4. Try one harmless memory: “Save this: I prefer soft lighting when reading.” Check the readback, say “yep,” then Stop and inspect Memories. A spoken “saved” alone is not proof.
 
 ## What it does

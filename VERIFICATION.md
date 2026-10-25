@@ -13,13 +13,13 @@ Earlier versions had user-confirmed standalone phone operation with the PC disco
 
 ## Automated checks
 
-`:checks:check` executes the original CharacterBook, CharacterBackup, and LiveProtocol main-based regression suites. The protocol suite includes 382 checks covering candidate payload boundaries, corrections, readback matching, cancellation, expiry, Off, duplicate/late events, review separation, and the zero-delegation fallback. Backend tests use a mock provider.
+`:checks:check` executes CharacterBook, CharacterBackup, LiveProtocol, and SessionTimer regression suites. SessionTimer uses a simulated clock to check finite and unlimited calls, wake-lease renewal, cancellation, and stale callbacks. The protocol suite includes 382 checks covering candidate payload boundaries, corrections, readback matching, cancellation, expiry, Off, duplicate/late events, review separation, and the zero-delegation fallback. Backend tests use a mock provider.
 
 Build and lint check compilation and static issues; they do not establish microphone routing or model behavior. No paid API requests are required by the ordinary regression suite.
 
 ## Public package checks (October 25, 2026)
 
-The standard Gradle 9.1.0 / AGP 9.0.1 build passed on Windows with Android SDK 36, Build-Tools 36.0.0, and the installed Android Studio JBR (Java 25). A fresh isolated Gradle cache was used. All three Java suites and 15 backend tests passed. The debug APK signature verified and its ID is `org.kinform.app.dev`. The wrapper JAR matched the official published SHA-256. CI on Linux/JDK 17 is configured but has not yet run on GitHub.
+The standard Gradle 9.1.0 / AGP 9.0.1 build passed on Windows with Android SDK 36, Build-Tools 36.0.0, and the installed Android Studio JBR (Java 25). A fresh isolated Gradle cache was used. All three Java suites and 15 backend tests passed. The debug APK signature verified and its ID is `org.kinform.app.dev`. The wrapper JAR matched the official published SHA-256. The published 0.8.15 code subsequently passed GitHub CI on Linux/JDK 17 and Node 22.
 
 Lint passed with 12 warnings (dependency-version notices, drawing allocation, and localization). Three inspected false positives have narrow annotated explanations: AudioRecord errors already enter cleanup through an exception handler; modern Back already registers through reflection; explicitly assigned radio IDs are converted to an enum ordinal. These annotations do not change runtime behavior. The obsolete SDK declaration was removed from the manifest; Gradle retains min SDK 31 and target 36.
 

@@ -315,8 +315,7 @@ public final class MainActivity extends Activity {
             }
         }catch(Exception e){text("Could not read pending suggestions. Existing data was kept.",14,MUTED);}
     }
-    // Radio IDs 200..202 are assigned immediately below; subtracting 200 yields
-    // the enum ordinal, not a resource lookup. Lint propagates the ID annotation.
+    // Explicit radio IDs map to enum ordinals, not a resource lookup.
     @android.annotation.SuppressLint("ResourceType")
     private void preferences(CharacterBook.Character c) {
         base("On your terms");
@@ -388,7 +387,7 @@ public final class MainActivity extends Activity {
         button("Stop listening",false,()->{
             if(VoiceService.active)startService(new Intent(this,VoiceService.class).setAction("stop"));
         });
-        text("Starts only when you tap Talk. Continues with the screen locked, with an active-session notification. Bluetooth loss ends the session. First tests are limited to five minutes.",14,MUTED);
+        text("Starts only when you tap Talk. Continues with the screen locked, with an active-session notification. Bluetooth loss ends the session. Phone-only session length is chosen in App Settings; your backend can enforce its own limits.",14,MUTED);
         button("Open Bluetooth settings",false,()->startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS)));
     }
     private void appSettings(){
@@ -408,8 +407,24 @@ public final class MainActivity extends Activity {
             try{ApiKeyStore.load(this);text("Personal key available on this phone",14,GREEN);}catch(Exception e){text("Add your own API key to start",14,MUTED);}
             button("Add / replace my API key",false,()->{if(settingsIdle())keyDialog();});
             button("Remove my API key",false,()->{if(!settingsIdle())return;try{ApiKeyStore.forget(this);go("settings",book.find(selectedId));}catch(Exception e){backupMessage("Could not remove key storage. Revoke the key in your OpenAI account.");}});
-            text("Your key is never included in character exports. Remembered keys are encrypted using Android Keystore; a compromised phone or app can still access a key during use. Use a dedicated project/key, monitor API usage and revoke it when needed. Five-minute sessions are a local safety limit, not an account spending cap.",13,MUTED);
+            text("Your key is never included in character exports. Remembered keys are encrypted using Android Keystore; a compromised phone or app can still access a key during use. Use a dedicated project/key, monitor API usage and revoke it when needed. Session time limits are not an account spending cap.",13,MUTED);
         }
+        divider();text("Phone-only session length",22,INK);
+        button("Session length: "+SessionDuration.label(SessionSettings.minutes(this)),false,()->{
+            if(!settingsIdle())return;
+            int[] choices=SessionDuration.choices();String[] labels=new String[choices.length];
+            int selected=0;
+            for(int i=0;i<choices.length;i++){labels[i]=SessionDuration.label(choices[i]);if(choices[i]==SessionSettings.minutes(this))selected=i;}
+            final int[] choice={selected};
+            new AlertDialog.Builder(this).setTitle("Phone-only session length")
+                .setSingleChoiceItems(labels,selected,(dialog,which)->choice[0]=which)
+                .setPositiveButton("Save",(dialog,which)->{
+                    if(!settingsIdle())return;
+                    if(SessionSettings.save(this,choices[choice[0]]))go("settings",book.find(selectedId));
+                    else backupMessage("Could not save session length. Reopen App Settings to check it before starting Talk.");
+                }).setNegativeButton("Cancel",null).show();
+        });
+        text("Applies to all characters on the next phone-only Talk. Unlimited removes Kinform's timer; API usage continues until you stop or the connection ends. Provider limits, Bluetooth loss and audio interruptions can still end a session. Legacy backend limits are separate.",14,MUTED);
         if(!direct){divider();text("Your backend",22,INK);
         try {text(ConnectionStore.load(this).getString("url"),14,MUTED);}catch(Exception e){text("No connection file imported",15,MUTED);}
         button("Import private connection file",false,()->{
@@ -597,7 +612,7 @@ public final class MainActivity extends Activity {
         }catch(Exception ignored){}
         super.onDestroy();
     }
-    // API 33+ uses registerModernBack() above; this is the older Android fallback.
+    // API 33+ is handled by registerModernBack; older versions use this fallback.
     @android.annotation.SuppressLint("GestureBackNavigation")
     @Override public void onBackPressed() { handleBack(); }
     private void handleBack() {

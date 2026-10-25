@@ -35,6 +35,7 @@ public final class VoiceService extends Service {
     private String character;
     private AudioManager.OnCommunicationDeviceChangedListener routeListener;
     private PowerManager.WakeLock wakeLock;
+    private SessionTimer sessionTimer;
     private boolean sessionStarted=false;
     private boolean direct,keepHistory;
     private String characterId,memoryDelegation;
@@ -60,7 +61,17 @@ public final class VoiceService extends Service {
                 .setContentIntent(open).setOngoing(true).addAction(new Notification.Action.Builder(null,"Stop",action).build()).build();
             startForeground(11,notification,ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE|ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
             wakeLock=((PowerManager)getSystemService(POWER_SERVICE)).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"Kinform:voice");
-            wakeLock.acquire(330000);
+            wakeLock.setReferenceCounted(false);
+            int minutes=ApiKeyStore.direct(this)?SessionSettings.minutes(this):SessionDuration.DEFAULT_MINUTES;
+            sessionTimer=new SessionTimer(new SessionTimer.Scheduler(){
+                public void post(Runnable task,long delay){main.postDelayed(task,delay);}
+                public void remove(Runnable task){main.removeCallbacks(task);}
+            },new SessionTimer.Lease(){
+                public void acquire(long timeout){wakeLock.acquire(timeout);}
+                public void release(){if(wakeLock.isHeld())wakeLock.release();}
+            });
+            sessionTimer.start(minutes,()->stopVoice("Session ended: selected time limit reached"),
+                ()->stopVoice("Session stopped: could not keep audio active"));
             manager=getSystemService(AudioManager.class); oldMode=manager.getMode();
             focus=new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
                 .setAudioAttributes(attributes()).setOnAudioFocusChangeListener(change->{if(change<0)stopVoice("Paused: another app needs audio");},main).build();
@@ -73,7 +84,6 @@ public final class VoiceService extends Service {
             manager.addOnCommunicationDeviceChangedListener(getMainExecutor(),routeListener);
             status="Connecting Bluetooth call audio…";
             awaitRoute(SystemClock.elapsedRealtime()+15000);
-            main.postDelayed(()->stopVoice("Session ended: five-minute test limit"),300000);
         } catch(Exception e) {stopVoice("Could not start audio. Check microphone and Nearby devices permissions.");}
         return START_NOT_STICKY;
     }
@@ -290,8 +300,7 @@ public final class VoiceService extends Service {
             default:return "Voice connection stopped. Check the backend setup";
         }
     }
-    // AudioRecord permission revocation is handled by the catch(Exception) below,
-    // which includes SecurityException and stops/cleans up the voice session.
+    // The catch(Exception) below handles SecurityException and cleans up audio.
     @android.annotation.SuppressLint("MissingPermission")
     private void startAudio() {
         if(stopping || ready)return;
@@ -359,6 +368,7 @@ public final class VoiceService extends Service {
     private void stopVoice(String reason,boolean finalizeDrafts) {
         if(Looper.myLooper()!=Looper.getMainLooper()){main.post(()->stopVoice(reason,finalizeDrafts));return;}
         if(stopping)return;stopping=true; capturing=false;ready=false;status=reason;
+        if(sessionTimer!=null)sessionTimer.stop();
         // Only explicit Stop finalizes late transcript drafts. Errors/route loss do not.
         if(finalizeDrafts && direct && protocol!=null && memoryTrace!=null){
             memoryTrace.event(MemoryTrace.Event.STOP_CHECK);

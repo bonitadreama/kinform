@@ -7,8 +7,8 @@ android {
         applicationId = "org.kinform.app"
         minSdk = 31
         targetSdk = 36
-        versionCode = 26
-        versionName = "0.8.15"
+        versionCode = 27
+        versionName = "0.8.16"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

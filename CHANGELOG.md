@@ -1,5 +1,11 @@
 # Changes
 
+## 0.8.16
+
+Phone-only session length is now a shared App Settings choice: 5, 15, 30, 60 minutes, or Unlimited. Existing installs keep the five-minute default until changed. A renewable bounded wake lock supports longer locked-screen calls and releases when the session stops. Cancellation removes the timer and renewal callbacks; stale callbacks cannot stop a later session. Provider and legacy-backend limits remain separate. Character data, keys, and memory protocols are unchanged.
+
+Automated timer tests cover all finite deadlines, Unlimited beyond 24 simulated hours, Stop, renewal failures, invalid stored choices, and stale callbacks. A real-phone long-call test is still needed.
+
 ## 0.8.15 source preview
 
 Natural explicit memory saving now keeps the user-derived candidate separate from character readback. Complete corrections create a new revision requiring a new readback and confirmation. Leading recognized laughter annotations and request punctuation are normalized without rewriting the fact. The no-delegation fallback saves an eligible confirmed candidate once. Readback matching accepts a trailing declarative phrase; premature success claims trigger bounded corrective steering.
