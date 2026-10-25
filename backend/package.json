@@ -1,0 +1,19 @@
+{
+  "name": "kinform-backend",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "test": "node --test test/*.test.mjs",
+    "setup": "node scripts/setup.mjs",
+    "smoke:live": "node scripts/smoke-live.mjs"
+  },
+  "dependencies": {
+    "selfsigned": "5.5.0",
+    "ws": "8.22.0"
+  }
+}
